@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     stages {
         stage('Build and Test .NET') {
             agent {
@@ -26,28 +27,35 @@ pipeline {
             agent {
                 docker { image 'node:14-alpine' }
             }
-            dir('DotnetTemplate.Web') {
-                stages {
-                    stage('Install Dependencies') {
-                        steps {
+
+            stages {
+                stage('Install Dependencies') {
+                    steps {
+                        dir('DotnetTemplate.Web') {
                             sh 'npm install'
                         }
                     }
+                }
 
-                    stage('Build TypeScript') {
-                        steps {
+                stage('Build TypeScript') {
+                    steps {
+                        dir('DotnetTemplate.Web') {
                             sh 'npm run build'
                         }
                     }
+                }
 
-                    stage('Test TypeScript') {
-                        steps {
+                stage('Test TypeScript') {
+                    steps {
+                        dir('DotnetTemplate.Web') {
                             sh 'npm t'
                         }
                     }
+                }
 
-                    stage('Run Lint') {
-                        steps {
+                stage('Run Lint') {
+                    steps {
+                        dir('DotnetTemplate.Web') {
                             sh 'npm run lint'
                         }
                     }
