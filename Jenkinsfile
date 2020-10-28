@@ -1,13 +1,5 @@
 pipeline {
     stages {
-        stage('Hello world') {
-            steps {
-                echo 'Hello world'
-            }
-        }
-        node {
-            checkout scm
-        }
         stage('Build and Test .NET') {
             agent {
                 docker { image 'mcr.microsoft.com/dotnet/core/sdk:3.1' }
@@ -17,31 +9,49 @@ pipeline {
             }
             stages {
                 stage('Build .NET') {
-                    dotnet build
+                    steps {
+                        sh 'dotnet build'
+                    }
                 }
+
                 stage('Test .NET') {
-                    dotnet test
+                    steps {
+                        sh 'dotnet test'
+                    }
                 }
             }
         }
-        stage('Install Dependencies') {
-            steps {
-                echo 'Deploying....'
+
+        stage('npm Stuff') {
+            agent {
+                docker { image 'node:14-alpine' }
             }
-        }
-        stage('Build TypeScript') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-        stage('Test TypeScript') {
-            steps {
-                echo 'Deploying....'
-            }
-        }
-        stage('Run Lint') {
-            steps {
-                echo 'Deploying....'
+            dir('DotnetTemplate.Web') {
+                stages {
+                    stage('Install Dependencies') {
+                        steps {
+                            sh 'npm install'
+                        }
+                    }
+
+                    stage('Build TypeScript') {
+                        steps {
+                            sh 'npm run build'
+                        }
+                    }
+
+                    stage('Test TypeScript') {
+                        steps {
+                            sh 'npm t'
+                        }
+                    }
+
+                    stage('Run Lint') {
+                        steps {
+                            sh 'npm run lint'
+                        }
+                    }
+                }
             }
         }
     }
