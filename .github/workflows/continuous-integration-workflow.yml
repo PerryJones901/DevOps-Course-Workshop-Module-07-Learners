@@ -2,7 +2,7 @@ name: Continuous Integration
 on: [push]                      # Will make the workflow run every time you push to any branch
 
 jobs:
-  build:
+  build:     
     name: Build and test
     runs-on: ubuntu-latest      # Sets the build environment a machine with the latest Ubuntu installed
     steps:
@@ -19,6 +19,11 @@ jobs:
 
     - name: Test .NET
       run: dotnet test
+
+    - name: Use Node 12
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12'
 
     - name: Install Dependencies
       working-directory: ./DotnetTemplate.Web
@@ -43,3 +48,4 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: perryjones/workshop8thing
         tag_with_ref: true
+        tags: latest,${{ github.sha }}
