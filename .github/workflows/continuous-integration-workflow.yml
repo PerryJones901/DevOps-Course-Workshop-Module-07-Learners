@@ -60,4 +60,6 @@ jobs:
         heroku_email: "perry.jones@softwire.com"
         usedocker: true
         healthcheck: "https://workshop8thing.herokuapp.com/health"
-        checkstring: "healthy"
+        delay: 2
+        checkstring: "Healthy"
+        rollbackonhealthcheckfailed: true
