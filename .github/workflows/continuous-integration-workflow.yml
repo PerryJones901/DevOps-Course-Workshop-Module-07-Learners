@@ -50,3 +50,12 @@ jobs:
         repository: perryjones/workshop8thing
         tag_with_ref: true
         tags: latest,${{ github.sha }}
+    
+    - name: Deploy to Heroku
+      uses: akhileshns/heroku-deploy@v3.6.8 # This is the action
+      if: ${{ github.ref == 'refs/heads/main' }}
+      with:
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: "workshop8thing" # Must be unique in Heroku
+        heroku_email: "perry.jones@softwire.com"
+        usedocker: true
