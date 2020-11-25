@@ -59,3 +59,4 @@ jobs:
         heroku_app_name: "workshop8thing" # Must be unique in Heroku
         heroku_email: "perry.jones@softwire.com"
         usedocker: true
+        healthcheck: "https://workshop8thing.herokuapp.com/health"
